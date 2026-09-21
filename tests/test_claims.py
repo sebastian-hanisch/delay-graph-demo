@@ -1,6 +1,7 @@
 """Die Aussagen der App als Tests: jede Zahl in den Hilfetexten, Presets, Tabellen und Szenen ist hier über die festen Sweep-Datensätze belegt (Toleranzen bewusst weit). Positive UND negative Aussagen.
 Der Vergleich ist ein eigener Nachbau an synthetischen Daten; die Zahlen sind Mittel über fünf feste Aufnahmen."""
 
+import dataclasses
 from functools import lru_cache
 
 import numpy as np
@@ -11,9 +12,16 @@ import dg_constants as C
 import dg_evaluation as ev
 
 
+def _slim(analysis):
+    """Die Tests lesen nur Kennzahlen (und `ev.verdict` aus dem Datensatz nur params und n_electrodes). Eine volle Analyse belegt ~134 MiB
+    (Signale des Datensatzes, Matching-Residuen, Verzögerungsdaten), der Cache hält dutzende Varianten mal fünf Aufnahmen - auf dem
+    CI-Rechner wurde der Lauf wegen Speichermangels beendet (Exit 137)."""
+    return dataclasses.replace(analysis, ds=dataclasses.replace(analysis.ds, X=None, X_clean=None, S=None), delay=None, matching=None)
+
+
 @lru_cache(maxsize=None)
 def _cached(items, settings, names):
-    return tuple(ev.analyse(ev.make_dataset(seed=s, **dict(items)), settings, comparators_used=names) for s in C.SWEEP_SEEDS)
+    return tuple(_slim(ev.analyse(ev.make_dataset(seed=s, **dict(items)), settings, comparators_used=names)) for s in C.SWEEP_SEEDS)
 
 
 def _A(settings=ev.Settings(), names=("ica",), **kw):

@@ -48,12 +48,14 @@ def _pct(x):
     return "–" if np.isnan(x) else f"{x:.0%}"
 
 
-@st.cache_data(show_spinner=False)
+# Eine Analyse belegt ~134 MiB, ein Datensatz ~57 MiB (gemessen im Standardfall) - ohne Obergrenze füllt jede neue
+# Reglerstellung den Speicher (Streamlit Cloud, CI-Rechner). Die neuesten Einträge bleiben, ältere werden verdrängt.
+@st.cache_data(show_spinner=False, max_entries=4)
 def _dataset(m, grid, contact_p, similarity, delay_max, jitter, rate_scale, noise, seconds, seed):
     return make_dataset(m, grid, contact_p, similarity, delay_max, jitter, rate_scale, noise, seconds, seed)
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, max_entries=3)
 def _analysis(data_params, settings):
     return analyse_for(data_params, settings)
 
