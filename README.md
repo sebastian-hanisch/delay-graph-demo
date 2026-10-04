@@ -18,10 +18,10 @@ die Menge ihrer Elektroden ist die Nachbarschaft der Zelle. Die Wellenform wird 
 
 ```
 ica-demo → sobi-demo → sca-demo
+ica-demo → nmf-demo (Nichtnegativität statt Unabhängigkeit)
 pca-demo + Clustering-Linie → spike-sorting-demo (Standardpipeline)
                               → template-matching-demo (Vorlagenabgleich: löst Überlappung auf)
                               → delay-graph-demo (Verzögerungsgraph: Zeitverzögerungen statt Wellenform)
-                              → NMF                                        [nicht gebaut]
 ```
 
 | Frage | Ergebnis (12 Zellen, 5×5 Elektroden, Rauschen 10 µV, 3 s; Mittel über 5 feste Datensätze, Seeds 100000–100004; Spitzen-F1 der Zellen; Verzögerungsgraph / Pipeline / Vorlagenabgleich / ICA) |
@@ -136,6 +136,4 @@ pytest tests/ -v
 
 ---
 
-Teil des [Operations-Research-Demo-Portfolios](https://sebastianhanisch.net/demos.html) von
-[Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning.
-Interesse an einer maßgeschneiderten Lösung? [Kontakt aufnehmen](https://sebastianhanisch.net/kontakt.html).
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zur Reihe: [Quellentrennung: von ICA bis Verzögerungsgraph](https://sebastianhanisch.net/konzepte-quellentrennung.html).
