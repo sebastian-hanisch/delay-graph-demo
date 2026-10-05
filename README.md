@@ -95,6 +95,7 @@ Regler: Zellen (4–30), Gitter (3–6), Kontaktwahrscheinlichkeit, Wellenform-�
 - **Nicht gebaut:** die Kombination beider Ansätze (Ausblick der Dissertation; etwa der Verzögerungsgraph als Start-Vorlagen für den Abgleich), das Verdoppeln der Abtastrate, die Cliquen-Überdeckung für fehlende Spikes und die Bandbreiten-Heuristik (Abschn. 2.5, Kap. 3). Auch nicht: Drift, korreliertes Rauschen, reale Daten
   (die Dissertation hat sie untersucht; die Ergebnisse waren dort schlechter, weil zu wenige Neuronen Kontakt zu mehr als einer Elektrode hatten).
 - **Synthetische Daten:** das Modell der Dissertation, feste Vorlagen je Kontakt, exakt konstante Verzögerungen (außer beim Jitter-Regler), weißes Gauß'sches Rauschen. Die Vergleichsverfahren sind Nachbauten aus den Vorgänger-Demos, nicht die Werkzeuge der Praxis.
+- **Die Spitzenerkennung des Spitzen-F1 (Kopie aus ica-demo) wandte die Mindesttiefe erst ab 10 gefundenen Spitzen an:** bei kürzeren Spuren blieben Rauschspitzen über 4 σ_MAD als Falschtreffer stehen, obwohl dieselbe Spur mit mehr Spitzen sie verworfen hätte. Jetzt gilt die Regel (30 % der typischen Tiefe, typische Tiefe = Median der höchstens 10 tiefsten Spitzen) auch dort, dann mit dem Median der gefundenen Spitzen. Gemessen über die 5 festen Sweep-Datensätze mit den Standard-Einstellungen: in allen 9 Sweeps ändert sich keine Kennzahl, und die Tests mit den in dieser Datei genannten Zahlen laufen unverändert grün. Als Test hinterlegt (`tests/test_detect_spikes_depth.py`).
 
 ## Verifikation
 

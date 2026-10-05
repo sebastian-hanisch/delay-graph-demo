@@ -35,12 +35,14 @@ def test_default_renders_without_exception():
     assert not at.error and not at.warning and len(at.success) == 1 and any("Eigener Nachbau" in i.value for i in at.info)
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("name", list(C.PRESETS))
 def test_every_preset_renders(name):
     at = _run(lambda a: _apply(a, C.PRESETS[name]))
     assert len(at.success) + len(at.warning) == 1
 
 
+@pytest.mark.slow
 def test_extreme_settings_render():
     def small(at):
         at.session_state["n_cells_slider"] = C.N_CELLS_MIN
@@ -100,6 +102,7 @@ def test_window_start_is_clamped_when_the_recording_gets_shorter():
     assert not at.exception and at.session_state["window_start"] == 0
 
 
+@pytest.mark.slow
 def test_sweep_and_scenes_run_on_demand():
     at = _run()
     [s for s in at.selectbox if s.key == "sweep_select"][0].select("seconds")

@@ -28,6 +28,7 @@ def test_preset_settings_are_within_slider_bounds():
         assert p["singles"] in C.SINGLE_MODES
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("name", list(C.PRESETS))
 def test_preset_stays_inside_its_bands(name):
     measured = _measure(C.PRESETS[name])

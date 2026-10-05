@@ -45,6 +45,7 @@ def _near(value, expected, tol=0.05):
 # --- Standardfall ------------------------------------------------------------------------------------------------------------------------
 
 
+@pytest.mark.slow
 def test_default_scene_numbers():
     """Beleg für 'Standardfall': Verzögerungsgraph 0.97 gegen Pipeline 0.73, Abgleich 0.85, ICA 0.72; trifft 99 %, ordnet 98 % richtig zu; Nachbarschaftsfehler klein; 20 % Einzelkontakt-Zellen."""
     a = _A()
@@ -70,6 +71,7 @@ def test_the_delay_graph_is_much_faster_than_pipeline_plus_matching():
     assert np.mean([x.seconds["dg"] * 5 for x in a]) < np.mean([x.seconds["matching"] for x in a])
 
 
+@pytest.mark.slow
 def test_excluding_single_contact_cells_costs_recall_in_the_default_scene():
     """Beleg für die Hilfe zu den Einzelkontakt-Zellen: ausgeschlossen 0.77 im Standardfall (zugelassen 0.97)."""
     allowed, excluded = _A(), _A(ev.Settings(min_clique=2))
@@ -79,12 +81,14 @@ def test_excluding_single_contact_cells_costs_recall_in_the_default_scene():
 # --- Sidebar-Hilfen: Zellen, Gitter, Kontakte ----------------------------------------------------------------------------------------------
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("m,dg,pipe,tm,ica", [(6, 0.99, 0.93, 0.95, 0.85), (25, 0.95, 0.52, 0.76, 0.55), (30, 0.94, 0.47, 0.74, 0.50)])
 def test_cell_count_help_text(m, dg, pipe, tm, ica):
     a = _A(m=m)
     assert _near(_f1(a, "dg"), dg, 0.04) and _near(_f1(a, "pipe"), pipe, 0.06) and _near(_f1(a, "tm"), tm, 0.06) and _near(_f1(a, "ica"), ica, 0.07)
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("grid,dg,pipe,tm,ica", [(3, 0.86, 0.76, 0.92, 0.42), (4, 0.91, 0.74, 0.82, 0.64), (6, 0.99, 0.78, 0.85, 0.79)])
 def test_grid_help_text(grid, dg, pipe, tm, ica):
     a = _A(grid=grid)
@@ -93,6 +97,7 @@ def test_grid_help_text(grid, dg, pipe, tm, ica):
         assert _f1(a, "tm") > _f1(a, "dg")                                                    # auf dem kleinen Gitter gewinnt der Abgleich
 
 
+@pytest.mark.slow
 def test_contact_probability_help_text():
     """Beleg: p = 0.1 -> 63 % Einzelkontakt-Zellen, F1 0.86 (Pipeline 0.71, Abgleich 0.74, ICA 0.71), ausgeschlossen 0.37 (Trefferquote 0.36, Sortiergenauigkeit 0.98); ab 0.35 nahe 1 (0.97 / 0.98)."""
     low = _A(contact_p=0.1)
@@ -102,12 +107,14 @@ def test_contact_probability_help_text():
     assert _near(_f1(_A(contact_p=0.35), "dg"), 0.97, 0.03) and _near(_f1(_A(contact_p=0.5), "dg"), 0.98, 0.03)
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("similarity,dg,pipe,tm", [(0.0, 0.99, 0.67, 0.81), (1.0, 0.97, 0.73, 0.85)])
 def test_similarity_help_text(similarity, dg, pipe, tm):
     a = _A(similarity=similarity)
     assert _near(_f1(a, "dg"), dg, 0.03) and _near(_f1(a, "pipe"), pipe, 0.06) and _near(_f1(a, "tm"), tm, 0.06)
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("delay,ica", [(0, 0.77), (8, 0.62)])
 def test_delay_range_help_text(delay, ica):
     a = _A(delay_max=delay)
@@ -117,6 +124,7 @@ def test_delay_range_help_text(delay, ica):
 # --- Sidebar-Hilfen: Jitter, Feuerrate, Rauschen, Länge ----------------------------------------------------------------------------------
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("jitter,dg,tm", [(1.0, 0.91, 0.80), (2.0, 0.70, 0.77), (3.0, 0.62, 0.63)])
 def test_jitter_help_text(jitter, dg, tm):
     a = _A(jitter=jitter)
@@ -125,6 +133,7 @@ def test_jitter_help_text(jitter, dg, tm):
         assert _f1(a, "tm") > _f1(a, "dg")                                                    # bei Jitter 2 gewinnt der Abgleich
 
 
+@pytest.mark.slow
 def test_low_firing_rate_is_a_weakness_and_high_firing_rate_a_strength():
     """Beleg: Faktor 0.25 (unter der angenommenen Untergrenze): 0.72 gegen Pipeline 0.86 und Abgleich 0.82, Genauigkeit der Detektion 0.62, Nachbarschaften 57 % fehlend / 48 % falsch; Faktor 4: 0.96 bei Pipeline 0.48."""
     low = _A(rate_scale=0.25)
@@ -134,6 +143,7 @@ def test_low_firing_rate_is_a_weakness_and_high_firing_rate_a_strength():
     assert _near(_f1(high, "dg"), 0.96, 0.03) and _near(_f1(high, "pipe"), 0.48, 0.07) and _near(_f1(high, "tm"), 0.82, 0.07) and _near(_f1(high, "ica"), 0.74, 0.08)
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("noise,dg,pipe,tm,ica", [(20.0, 0.88, 0.58, 0.69, 0.57), (30.0, 0.72, 0.27, 0.36, 0.42), (40.0, 0.60, 0.10, 0.11, 0.22)])
 def test_noise_help_text(noise, dg, pipe, tm, ica):
     a = _A(noise=noise)
@@ -150,12 +160,14 @@ def test_one_second_of_recording_is_enough():
 # --- Presets und Szenen ------------------------------------------------------------------------------------------------------------------
 
 
+@pytest.mark.slow
 def test_many_contacts_same_shapes_preset_numbers():
     """Beleg: 20 Zellen, 4×4, p 0.5, Ähnlichkeit 0: Verzögerungsgraph 0.95, Abgleich 0.85, Pipeline 0.55, ICA 0.43, SCA 0.20."""
     a = _A(names=("ica", "sca"), contact_p=0.5, similarity=0.0, m=20, grid=4)
     assert _near(_f1(a, "dg"), 0.95, 0.04) and _near(_f1(a, "tm"), 0.85, 0.06) and _near(_f1(a, "pipe"), 0.55, 0.07) and _near(_f1(a, "ica"), 0.43, 0.08) and _near(_f1(a, "sca"), 0.20, 0.10)
 
 
+@pytest.mark.slow
 def test_more_cells_than_electrodes_preset_numbers():
     """Beleg: 30 Zellen auf 25 Elektroden: 0.94 (Abgleich 0.74, ICA 0.50, Pipeline 0.47), SCA 0.07; im Mittel ein Zellenpaar mit identischer Charakteristik."""
     a = _A(names=("ica", "sca"), m=30)
@@ -163,11 +175,13 @@ def test_more_cells_than_electrodes_preset_numbers():
     assert _near(np.mean([x.ambiguous_pairs for x in a]), 1.0, 0.8)
 
 
+@pytest.mark.slow
 def test_crowded_single_contact_cells_are_a_weakness_because_of_proposition_2_3_1():
     a = _A(m=20, grid=3, contact_p=0.1)
     assert _near(np.mean([x.ambiguous_pairs for x in a]), 8.8, 3.0) and _near(_f1(a, "dg"), 0.59, 0.07) and _near(_f1(a, "tm"), 0.68, 0.07) and _f1(a, "dg") <= max(_f1(a, "tm"), _f1(a, "pipe")) + 0.02
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("kwargs,settings,codes", [
     ({}, ev.Settings(), {"delay_wins", "comparable", "waveform_wins"}),                      # auf einzelnen Datensätzen holt der Abgleich auf (kleinster F1 des Verzögerungsgraphen 0.89)
     (dict(m=30), ev.Settings(), {"delay_wins", "comparable", "waveform_wins"}),
@@ -182,6 +196,7 @@ def test_verdict_codes_hold_on_several_datasets(kwargs, settings, codes):
         assert ev.verdict(a)[1] in codes, (kwargs, ev.verdict(a)[1])
 
 
+@pytest.mark.slow
 def test_sweep_and_scene_tables_have_the_expected_shape_and_the_scenes_split_into_strengths_and_weaknesses():
     rows = ev.sweep("seconds", values=(1.0, 2.0))
     again = ev.sweep("seconds", values=(1.0, 2.0))
@@ -197,6 +212,7 @@ def test_sweep_and_scene_tables_have_the_expected_shape_and_the_scenes_split_int
     assert all(r["sec_dg"] < r["sec_matching"] for r in scenes)
 
 
+@pytest.mark.slow
 def test_delays_add_little_in_this_model_because_electrode_sets_already_tell_cells_apart():
     """Beleg für die ehrliche Einordnung: ohne Verzögerungen (Spanne 0) erreicht der Verzögerungsgraph 0.99 wie mit ihnen; auch auf einem dicht besetzten kleinen Gitter (20 Zellen, 3×3, p 0.5) kaum Unterschied."""
     assert _near(_f1(_A(delay_max=0), "dg"), _f1(_A(delay_max=8), "dg"), 0.03)
