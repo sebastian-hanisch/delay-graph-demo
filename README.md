@@ -38,7 +38,7 @@ pca-demo + Clustering-Linie → spike-sorting-demo (Standardpipeline)
 | **Kleines Gitter** | ❌ 3×3 Elektroden: 0.86 gegen Abgleich **0.92** (Pipeline 0.76, ICA 0.42): mehrere Zellen teilen sich dieselben Elektroden |
 | **Einzelkontakt-Zellen** | p = 0.1 (63 % der Zellen mit einem Kontakt): 0.86 / 0.71 / 0.74 / 0.71; **ausgeschlossen** (nur Spikes mit bestätigter Kante) nur **0.37** (Trefferquote 0.36, aber alles Gemeldete stimmt: Sortiergenauigkeit 0.98); im Standardfall 0.77 statt 0.97 |
 | **Nicht trennbare Zellen** | ❌ auf 3×3 mit 20 Zellen und p 0.1 gibt es im Mittel 8.8 Zellenpaare mit identischer Charakteristik (Prop. 2.3.1): 0.59 gegen Abgleich 0.68 (siehe Szenen) |
-| Verzögerungsspanne | ⚠️ überraschend: der Verzögerungsgraph erreicht 0.99 auch **ohne** Verzögerungen (Spanne 0) und mit 8 – die **Elektrodenmengen** unterscheiden die Zellen schon; die Verzögerungen tragen in diesem Modell wenig. ICA leidet (0.77 → 0.62), weil die Mischung nicht augenblicklich ist |
+| Verzögerungsspanne | ⚠️ überraschend: der Verzögerungsgraph erreicht 0.99 auch **ohne** Verzögerungen (Spanne 0) und mit 8 – die **Elektrodenmengen** unterscheiden die Zellen schon; die Verzögerungen bringen in diesem Modell wenig. ICA leidet (0.77 → 0.62), weil die Mischung nicht augenblicklich ist |
 
 ## Was die Demo zeigt
 
